@@ -30,7 +30,7 @@ public class Loader : MonoBehaviour {
         //socketShit();
         #endif
 
-        size = new int[3] { 256, 256, 256 };
+        size = new int[3] { 512, 512, 22 };
         // load the raw data
         Color[] colors = LoadRAWFile();
 		// create the texture
@@ -65,9 +65,34 @@ public class Loader : MonoBehaviour {
 		}
 
 		return colors;*/
-        
+
+        TextAsset ta = Resources.Load("pixeldata") as TextAsset;
+        byte[] data = ta.bytes;
+
+        byte[] rows = { data[0], data[1], data[2], data[3] };
+        size[0] = BitConverter.ToInt16(rows, 0);
+        byte[] columns = { data[4], data[5], data[6], data[7] };
+        size[1] = BitConverter.ToInt16(columns, 0);
+        byte[] noImages = { data[8], data[9], data[10], data[11] };
+        size[2] = BitConverter.ToInt16(noImages, 0);
+        byte[] maxVal = { data[12], data[13], data[14], data[15] };
+        int max = BitConverter.ToInt16(maxVal, 0);
+
+        Color[] colours = new Color[(data.Length - 16)/2];
+        int index = 0;
+        for (int i = 16; i < data.Length - 16; i += 2)
+        {
+            byte[] unit = { data[i], data[i + 1] };
+            colours[index] = Color.black;
+            colours[index++].a = (float)(Convert.ToInt32(BitConverter.ToInt16(unit, 0))) / max;
+        }
+
+        /*
         TextAsset csv = Resources.Load("pixelData") as TextAsset;
+        FileInfo theSourceFile = new FileInfo(Application.dataPath + "/Resources/pixelData.csv");
+        StreamReader reader = theSourceFile.OpenText();
         string[] values = csv.text.Split(',');
+        DestroyImmediate(csv, true);
         size[0] = Convert.ToInt32(values[0]);
         size[1] = Convert.ToInt32(values[1]);
         size[2] = Convert.ToInt32(values[2]);
@@ -79,6 +104,20 @@ public class Loader : MonoBehaviour {
             colours[index] = Color.black;
             colours[index++].a = (float)(Convert.ToInt32(values[i])) / max;
         }
+        Color[] colours = new Color[512*512*22];
+        string text = "";
+        int index = 0;
+        text = reader.ReadLine();
+        text = reader.ReadLine();
+        text = reader.ReadLine();
+        text = reader.ReadLine();
+        while (index < colours.Length)
+        {
+            text = reader.ReadLine();
+            text = text.Substring(0, text.Length - 1);
+            colours[index] = Color.black;
+            colours[index++].a = (float)(Convert.ToInt32(text)) / 919;
+        }*/
 
         return colours;
     }
