@@ -118,8 +118,9 @@ public class Loader : MonoBehaviour {
             colours[index] = Color.black;
             colours[index++].a = (float)(Convert.ToInt32(text)) / 919;
         }*/
-
         return colours;
+
+        
     }
 
 #if !UNITY_EDITOR

@@ -37,7 +37,6 @@ public class GestureAction : MonoBehaviour
             xRotationFactor = GestureManager.Instance.NavigationPosition.x * RotationSensitivity;
             yRotationFactor = GestureManager.Instance.NavigationPosition.y * RotationSensitivity;
             zRotationFactor = GestureManager.Instance.NavigationPosition.z * RotationSensitivity;
-            Debug.Log(xRotationFactor + " " + yRotationFactor + " " + zRotationFactor);
             // 2.c: transform.Rotate along the Y axis using rotationFactor.
             transform.Rotate(new Vector3(-1 * xRotationFactor, -1 * yRotationFactor, -1 * zRotationFactor));
         }
