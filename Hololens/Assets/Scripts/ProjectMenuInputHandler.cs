@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ProjectMenuInputHandler : MonoBehaviour {
-
+    public Canvas ConnectMenu, ScanMenu;
 	// Use this for initialization
 	void Start () {
 		
@@ -17,18 +17,14 @@ public class ProjectMenuInputHandler : MonoBehaviour {
     // Take user back to the connect menu, from the project selection menu.
     public void onBackButtonPressed()
     {
-        GameObject.FindGameObjectWithTag("ConnectMenuTag").SetActive(true);
-        GameObject.FindGameObjectWithTag("ConnectMenuTag").GetComponent<Canvas>().enabled = true;
-        GameObject.FindGameObjectWithTag("ProjectMenuTag").SetActive(false);
-        GameObject.FindGameObjectWithTag("ProjectMenuTag").GetComponent<Canvas>().enabled = false;
+        this.gameObject.SetActive(false);
+        ConnectMenu.gameObject.SetActive(true);
     }
 
     // Take user to the scan selection menu, from the project menu.
     public void onSelectButtonPressed()
     {
-        GameObject.FindGameObjectWithTag("ScanMenuTag").SetActive(true);
-        GameObject.FindGameObjectWithTag("ScanMenuTag").GetComponent<Canvas>().enabled = true;
-        GameObject.FindGameObjectWithTag("ProjectMenuTag").SetActive(false);
-        GameObject.FindGameObjectWithTag("ProjectMenuTag").GetComponent<Canvas>().enabled = false;
+        this.gameObject.SetActive(false);
+        ScanMenu.gameObject.SetActive(true);
     }
 }

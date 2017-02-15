@@ -7,6 +7,7 @@ public class ConnectMenuInputHandler : MonoBehaviour {
     public Text IPText;
     public int index = 0;
     public int[] IPIndeces = null;
+    public Canvas ProjectMenu;
 
 	// Use this for initialization
 	void Start () {
@@ -46,10 +47,8 @@ public class ConnectMenuInputHandler : MonoBehaviour {
         /* TODO: Get list of projects, and open next menu, initializing it with the proper list.
          * Activate some loading icon in the meantime
          * */
-        GameObject.FindGameObjectWithTag("ProjectMenuTag").SetActive(true);
-        GameObject.FindGameObjectWithTag("ProjectMenuTag").GetComponent<Canvas>().enabled = true;
-        GameObject.FindGameObjectWithTag("ConnectMenuTag").SetActive(false);
-        GameObject.FindGameObjectWithTag("ConnectMenuTag").GetComponent<Canvas>().enabled = false;
+        this.gameObject.SetActive(false);
+        ProjectMenu.gameObject.SetActive(true);
     }
 
 }
