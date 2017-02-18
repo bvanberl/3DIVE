@@ -24,6 +24,9 @@ public class ProjectMenuInputHandler : MonoBehaviour {
     // Take user to the scan selection menu, from the project menu.
     public void onSelectButtonPressed()
     {
+        /* TODO: Get list of scans in selected project, and open next menu, initializing it with the proper list.
+         * Activate some loading icon in the meantime
+         * */
         this.gameObject.SetActive(false);
         ScanMenu.gameObject.SetActive(true);
     }

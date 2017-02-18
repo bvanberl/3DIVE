@@ -9,6 +9,8 @@ public class GestureAction : MonoBehaviour
 {
     [Tooltip("Rotation max speed controls amount of rotation.")]
     public float RotationSensitivity = 10.0f;
+    public float TranslationSensitivity = 1.0f;
+    public float ScalingSensitivity = 1.0f;
 
     private Vector3 manipulationPreviousPosition;
     
@@ -38,7 +40,7 @@ public class GestureAction : MonoBehaviour
             yRotationFactor = GestureManager.Instance.NavigationPosition.y * RotationSensitivity;
             zRotationFactor = GestureManager.Instance.NavigationPosition.z * RotationSensitivity;
             // 2.c: transform.Rotate along the Y axis using rotationFactor.
-            transform.Rotate(new Vector3(-1 * xRotationFactor, -1 * yRotationFactor, -1 * zRotationFactor));
+            transform.Rotate(new Vector3(1 * yRotationFactor, 1 * xRotationFactor, 1 * zRotationFactor));
         }
     }
 
@@ -56,11 +58,26 @@ public class GestureAction : MonoBehaviour
             Vector3 moveVector = Vector3.zero;
             // 4.a: Calculate the moveVector as position - manipulationPreviousPosition.
             moveVector = position - manipulationPreviousPosition;
+
+            if (!TransformManager.Instance.isScaling) // Move the hologram.
+            {
+                // 4.a: Increment this transform's position by the moveVector.
+                transform.position += TranslationSensitivity * moveVector;
+            }
+            else // Scale the hologram.
+            {
+                if ((position - this.gameObject.transform.position).magnitude > (manipulationPreviousPosition - this.gameObject.transform.position).magnitude)
+                {
+                    transform.localScale += ScalingSensitivity * (new Vector3(moveVector.magnitude, moveVector.magnitude, moveVector.magnitude));
+                }
+                else
+                {
+                    transform.localScale += -ScalingSensitivity * (new Vector3(moveVector.magnitude, moveVector.magnitude, moveVector.magnitude));
+                }
+                
+            }
             // 4.a: Update the manipulationPreviousPosition with the current position.
             manipulationPreviousPosition = position;
-
-            // 4.a: Increment this transform's position by the moveVector.
-            transform.position += moveVector;
         }
     }
 }

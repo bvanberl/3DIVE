@@ -9,6 +9,7 @@ public class TransformManager : Singleton<TransformManager>
     float expandAnimationCompletionTime;
     // Store a bool for whether our Scan model is expanded or not.
     bool isModelExpanding = false;
+    public bool isScaling = false;
 
     // KeywordRecognizer object.
     KeywordRecognizer keywordRecognizer;
@@ -27,7 +28,7 @@ public class TransformManager : Singleton<TransformManager>
         /* TODO: DEVELOPER CODING EXERCISE 5.a */
 
         // 5.a: Add keyword Expand Model to call the ExpandScanCommand function.
-        keywordCollection.Add("Expand Scan", ExpandScanCommand);
+        keywordCollection.Add("Scale Scan", ScaleScanCommand);
 
         // 5.a: Add keyword Reset Model to call the ResetScanCommand function.
         keywordCollection.Add("Reset Scan", ResetScanCommand);
@@ -55,6 +56,13 @@ public class TransformManager : Singleton<TransformManager>
 
     private void MoveScanCommand(PhraseRecognizedEventArgs args)
     {
+        isScaling = false;
+        GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
+    }
+
+    private void ScaleScanCommand(PhraseRecognizedEventArgs args)
+    {
+        isScaling = true;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
     }
 
@@ -79,7 +87,7 @@ public class TransformManager : Singleton<TransformManager>
         ExpandModel.Instance.Reset();
     }
 
-    private void ExpandScanCommand(PhraseRecognizedEventArgs args)
+    /*private void ExpandScanCommand(PhraseRecognizedEventArgs args)
     {
         // Swap out the current model for the expanded model.
         GameObject currentModel = ExpandModel.Instance.gameObject;
@@ -103,7 +111,7 @@ public class TransformManager : Singleton<TransformManager>
         isModelExpanding = true;
 
         ExpandModel.Instance.Expand();
-    }
+    }*/
 
     public void Update()
     {
