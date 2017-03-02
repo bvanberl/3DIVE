@@ -11,15 +11,21 @@ public class Note : MonoBehaviour {
     private static string deviceName = string.Empty;
     private int samplingRate = 44100;
     private const int messageLength = 10;
+    public AudioSource audioSource;
+    public MicrophoneManager microphoneManager;
 
     // Use this for initialization
     void Awake () {
+        // Turn the microphone on, which returns the recorded audio.
+        audioSource.clip = microphoneManager.StartRecording();
+
+        /*
         PhraseRecognitionSystem.Shutdown();
         dictRcg = new DictationRecognizer();
         dictRcg.DictationResult += DictationRecognizer_DictationResult;
         dictRcg.DictationHypothesis += DictationRecognizer_DictationHypothesis;
         dictRcg.Start();
-        AudioClip recorded = Microphone.Start(deviceName, false, messageLength, samplingRate);
+        AudioClip recorded = Microphone.Start(deviceName, false, messageLength, samplingRate);*/
     }
 	
 	// Update is called once per frame

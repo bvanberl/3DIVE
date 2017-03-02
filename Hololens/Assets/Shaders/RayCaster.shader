@@ -9,14 +9,20 @@ Shader "Custom/Ray Casting" {
 		// the data cube
 		[NoScaleOffset] _Data ("Data Texture", 3D) = "" {}
 		// data slicing and thresholding
-		_SliceAxis1Min ("Slice along axis 1: min", Range(0,1)) = 0
-		_SliceAxis1Max ("Slice along axis 1: max", Range(0,1)) = 1
-		_SliceAxis2Min ("Slice along axis 2: min", Range(0,1)) = 0
-		_SliceAxis2Max ("Slice along axis 2: max", Range(0,1)) = 1
-		_SliceAxis3Min ("Slice along axis 3: min", Range(0,1)) = 0
-		_SliceAxis3Max ("Slice along axis 3: max", Range(0,1)) = 1
-		_DataMin ("Data threshold: min", Range(0,1)) = 0
-		_DataMax ("Data threshold: max", Range(0,1)) = 1
+		_SliceAxis1Min("Slice along axis 1: min", Range(0,1)) = 0
+		_SliceAxis1Max("Slice along axis 1: max", Range(0,1)) = 1
+		_SliceAxis2Min("Slice along axis 2: min", Range(0,1)) = 0
+		_SliceAxis2Max("Slice along axis 2: max", Range(0,1)) = 1
+		_SliceAxis3Min("Slice along axis 3: min", Range(0,1)) = 0
+		_SliceAxis3Max("Slice along axis 3: max", Range(0,1)) = 1
+		_DataMin("Data threshold: min", Range(-0.5,0.5)) = 0
+		_DataMax("Data threshold: max", Range(-0.5,0.5)) = 1
+		_boxMinX("Min X clip for box", Range(-0.5,0.5)) = -0.5
+		_boxMinY("Min Y clip for box", Range(-0.5,0.5)) = -0.5
+		_boxMinZ("Min Z clip for box", Range(-0.5,0.5)) = -0.5
+		_boxMaxX("Max X clip for box", Range(-0.5,0.5)) = 0.5
+		_boxMaxY("Max Y clip for box", Range(-0.5,0.5)) = 0.5
+		_boxMaxZ("Max Z clip for box", Range(-0.5,0.5)) = 0.5
 		// normalization of data intensity (has to be adjusted for each data set, also depends on the number of steps)
 		_Normalization ("Intensity normalization", Float) = 1 
 	}
@@ -42,6 +48,7 @@ Shader "Custom/Ray Casting" {
 			float _SliceAxis3Min, _SliceAxis3Max;
 			float _DataMin, _DataMax;
 			float _Normalization;
+			float _boxMinX, _boxMinY, _boxMinZ, _boxMaxX, _boxMaxY, _boxMaxZ;
 
 			// calculates intersection between a ray and a box
 			// http://www.siggraph.org/education/materials/HyperGraph/raytrace/rtinter3.htm
@@ -118,8 +125,8 @@ Shader "Custom/Ray Casting" {
 			{
 			    i.ray_d = normalize(i.ray_d);
 			    // calculate eye ray intersection with cube bounding box
-				float3 boxMin = { -0.5, -0.5, -0.5 };
-				float3 boxMax = {  0.5,  0.5,  0.5 };
+				float3 boxMin = { _boxMinX,  _boxMinY,  _boxMinZ };
+				float3 boxMax = {  _boxMaxX,  _boxMaxY,  _boxMaxZ };
 			    float tNear, tFar;
 			    bool hit = IntersectBox(i.ray_o, i.ray_d, boxMin, boxMax, tNear, tFar);
 			    if (!hit) discard;

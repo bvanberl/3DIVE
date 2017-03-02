@@ -29,4 +29,9 @@ public class ScanMenuInputHandler : MonoBehaviour {
         this.gameObject.SetActive(false);
         BrainMenu.gameObject.SetActive(true);
     }
+
+    public void onCloseButtonPressed()
+    {
+        Application.Quit();
+    }
 }

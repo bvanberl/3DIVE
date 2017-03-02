@@ -10,9 +10,10 @@ public class TransformManager : Singleton<TransformManager>
     // Store a bool for whether our Scan model is expanded or not.
     bool isModelExpanding = false;
     public bool isScaling = false;
+    public bool isSlicing = false;
 
     // KeywordRecognizer object.
-    KeywordRecognizer keywordRecognizer;
+    public KeywordRecognizer keywordRecognizer;
 
     // Defines which function to call when a keyword is recognized.
     delegate void KeywordAction(PhraseRecognizedEventArgs args);
@@ -27,8 +28,11 @@ public class TransformManager : Singleton<TransformManager>
 
         /* TODO: DEVELOPER CODING EXERCISE 5.a */
 
-        // 5.a: Add keyword Expand Model to call the ExpandScanCommand function.
+        // 5.a: Add keyword Scale Scan to call the MoveScanCommand function.
         keywordCollection.Add("Scale Scan", ScaleScanCommand);
+
+        // 5.a: Add keyword Expand Model to call the ExpandScanCommand function.
+        keywordCollection.Add("Slice Scan", SliceScanCommand);
 
         // 5.a: Add keyword Reset Model to call the ResetScanCommand function.
         keywordCollection.Add("Reset Scan", ResetScanCommand);
@@ -57,12 +61,21 @@ public class TransformManager : Singleton<TransformManager>
     private void MoveScanCommand(PhraseRecognizedEventArgs args)
     {
         isScaling = false;
+        isSlicing = false;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
     }
 
     private void ScaleScanCommand(PhraseRecognizedEventArgs args)
     {
         isScaling = true;
+        isSlicing = false;
+        GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
+    }
+
+    private void SliceScanCommand(PhraseRecognizedEventArgs args)
+    {
+        isSlicing = true;
+        isScaling = false;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
     }
 

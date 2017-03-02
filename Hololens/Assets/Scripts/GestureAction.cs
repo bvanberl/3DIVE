@@ -9,8 +9,9 @@ public class GestureAction : MonoBehaviour
 {
     [Tooltip("Rotation max speed controls amount of rotation.")]
     public float RotationSensitivity = 10.0f;
-    public float TranslationSensitivity = 1.0f;
-    public float ScalingSensitivity = 1.0f;
+    public float TranslationSensitivity = 1.5f;
+    public float ScalingSensitivity = 2.0f;
+    public float SlicingSensitivity = 3.0f;
 
     private Vector3 manipulationPreviousPosition;
     
@@ -59,7 +60,13 @@ public class GestureAction : MonoBehaviour
             // 4.a: Calculate the moveVector as position - manipulationPreviousPosition.
             moveVector = position - manipulationPreviousPosition;
 
-            if (!TransformManager.Instance.isScaling) // Move the hologram.
+            if (TransformManager.Instance.isSlicing) // Slice the MRI vertically
+            {               
+                float val = this.gameObject.GetComponentInChildren<Renderer>().material.GetFloat("_boxMaxY");
+                float sliceVal = Mathf.Clamp(val + moveVector.y, -0.5f, 0.5f);
+                this.gameObject.GetComponentInChildren<Renderer>().material.SetFloat("_boxMaxY", sliceVal);
+            }
+            else if (!TransformManager.Instance.isScaling) // Move the hologram.
             {
                 // 4.a: Increment this transform's position by the moveVector.
                 transform.position += TranslationSensitivity * moveVector;

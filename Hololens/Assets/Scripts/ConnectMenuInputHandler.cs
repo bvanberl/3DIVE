@@ -51,4 +51,8 @@ public class ConnectMenuInputHandler : MonoBehaviour {
         ProjectMenu.gameObject.SetActive(true);
     }
 
+    public void onCloseButtonPressed()
+    {
+        Application.Quit();
+    }
 }

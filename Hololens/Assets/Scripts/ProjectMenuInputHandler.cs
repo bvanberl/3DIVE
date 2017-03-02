@@ -30,4 +30,9 @@ public class ProjectMenuInputHandler : MonoBehaviour {
         this.gameObject.SetActive(false);
         ScanMenu.gameObject.SetActive(true);
     }
+
+    public void onCloseButtonPressed()
+    {
+        Application.Quit();
+    }
 }
