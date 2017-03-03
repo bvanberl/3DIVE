@@ -172,6 +172,7 @@ namespace Academy.HoloToolkit.Unity
         private void ManipulationRecognizer_ManipulationCompletedEvent(InteractionSourceKind source, Vector3 position, Ray ray)
         {
             IsManipulating = false;
+            HandsManager.Instance.FocusedGameObject.SendMessageUpwards("PerformManipulationComplete", position);
         }
 
         private void ManipulationRecognizer_ManipulationCanceledEvent(InteractionSourceKind source, Vector3 position, Ray ray)

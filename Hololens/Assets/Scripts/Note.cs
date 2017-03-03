@@ -14,6 +14,7 @@ public class Note : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+        transform.LookAt(Camera.main.transform);
+        transform.localEulerAngles += new Vector3(0.0f, 180.0f, 0.0f);
 	}
 }

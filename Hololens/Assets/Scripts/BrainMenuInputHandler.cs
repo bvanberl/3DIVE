@@ -44,8 +44,11 @@ public class BrainMenuInputHandler : MonoBehaviour {
     }
 	
 	// Update is called once per frame
-	void Update () {
-		
+	void Update () {/*
+        if (DictationDisplay.text.Length > 30 * lineCount)
+        {
+            DictationDisplay.text += "\n";
+        }        */
 	}
 
     public void onCreateNoteButtonPressed()
@@ -91,9 +94,14 @@ public class BrainMenuInputHandler : MonoBehaviour {
 
     public void StartRecording()
     {
+        textSoFar = new StringBuilder();
         // 3.a Shutdown the PhraseRecognitionSystem. This controls the KeywordRecognizers
         PhraseRecognitionSystem.Shutdown();
-
+        dictationRecognizer = new DictationRecognizer();
+        dictationRecognizer.DictationHypothesis += DictationRecognizer_DictationHypothesis;
+        dictationRecognizer.DictationResult += DictationRecognizer_DictationResult;
+        dictationRecognizer.DictationComplete += DictationRecognizer_DictationComplete;
+        dictationRecognizer.DictationError += DictationRecognizer_DictationError;
         // 3.a: Start dictationRecognizer
         dictationRecognizer.Start();
     }
@@ -104,13 +112,6 @@ public class BrainMenuInputHandler : MonoBehaviour {
         dictationRecognizer.Dispose();
         PhraseRecognitionSystem.Restart();
         TransformManager.Instance.keywordRecognizer.Start();
-        // 3.a: Check if dictationRecognizer.Status is Running and stop it if so
-        /*if (dictationRecognizer.Status == SpeechSystemStatus.Running)
-        {
-            dictationRecognizer.Stop();
-        }*/
-
-        //Microphone.End(deviceName);
     }
 
     /// <summary>
@@ -135,11 +136,15 @@ public class BrainMenuInputHandler : MonoBehaviour {
         textSoFar.Append(text);
 
         // 3.a: Set DictationDisplay text to be textSoFar
-        if(textSoFar.Length > (lineCount++)*30)
-        {
-            textSoFar.Append("\n");
-        }
         DictationDisplay.text = textSoFar.ToString();
+
+        if(DictationDisplay.text.Length > lineCount*30)
+        {
+            lineCount++;
+            DictationDisplay.text += "\n";
+            textSoFar = new StringBuilder();
+            textSoFar.Append(DictationDisplay.text);
+        }
     }
 
     /// <summary>

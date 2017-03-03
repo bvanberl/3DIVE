@@ -33,6 +33,5 @@ public class Brain : MonoBehaviour {
     public void addNote(GameObject newNote)
     {
         notes.Add(newNote);
-        //newNote.transform.parent = this.gameObject.transform;
     }
 }

@@ -14,7 +14,7 @@ public class GestureAction : MonoBehaviour
     public float SlicingSensitivity = 3.0f;
 
     private Vector3 manipulationPreviousPosition;
-    
+
     private float xRotationFactor, yRotationFactor, zRotationFactor;
 
     void Update()
@@ -24,10 +24,15 @@ public class GestureAction : MonoBehaviour
 
     private void PerformRotation()
     {
+        
         if (GestureManager.Instance.IsNavigating &&
             (!ExpandModel.Instance.IsModelExpanded ||
             (ExpandModel.Instance.IsModelExpanded && HandsManager.Instance.FocusedGameObject == gameObject)))
         {
+            foreach (GameObject note in this.gameObject.GetComponentInChildren<Brain>().notes)
+            {
+                note.transform.parent = null;
+            }
             /* TODO: DEVELOPER CODING EXERCISE 2.c */
             /*
             // 2.c: Calculate rotationFactor based on GestureManager's NavigationPosition.X and multiply by RotationSensitivity.
@@ -47,6 +52,20 @@ public class GestureAction : MonoBehaviour
 
     void PerformManipulationStart(Vector3 position)
     {
+        if (TransformManager.Instance.isMoving)
+        {
+            foreach (GameObject note in this.gameObject.GetComponentInChildren<Brain>().notes)
+            {
+                note.transform.parent = this.gameObject.transform;
+            }
+        }
+        else
+        {
+            foreach (GameObject note in this.gameObject.GetComponentInChildren<Brain>().notes)
+            {
+                note.transform.parent = null;
+            }
+        }
         manipulationPreviousPosition = position;
     }
 
@@ -61,17 +80,17 @@ public class GestureAction : MonoBehaviour
             moveVector = position - manipulationPreviousPosition;
 
             if (TransformManager.Instance.isSlicing) // Slice the MRI vertically
-            {               
+            {
                 float val = this.gameObject.GetComponentInChildren<Renderer>().material.GetFloat("_boxMaxY");
                 float sliceVal = Mathf.Clamp(val + moveVector.y, -0.5f, 0.5f);
                 this.gameObject.GetComponentInChildren<Renderer>().material.SetFloat("_boxMaxY", sliceVal);
             }
-            else if (!TransformManager.Instance.isScaling) // Move the hologram.
+            else if (TransformManager.Instance.isMoving) // Move the hologram.
             {
                 // 4.a: Increment this transform's position by the moveVector.
                 transform.position += TranslationSensitivity * moveVector;
             }
-            else // Scale the hologram.
+            else if(TransformManager.Instance.isScaling) // Scale the hologram.
             {
                 if ((position - this.gameObject.transform.position).magnitude > (manipulationPreviousPosition - this.gameObject.transform.position).magnitude)
                 {
@@ -81,10 +100,18 @@ public class GestureAction : MonoBehaviour
                 {
                     transform.localScale += -ScalingSensitivity * (new Vector3(moveVector.magnitude, moveVector.magnitude, moveVector.magnitude));
                 }
-                
+
             }
             // 4.a: Update the manipulationPreviousPosition with the current position.
             manipulationPreviousPosition = position;
+        }
+    }
+
+    void PerformManipulationComplete(Vector3 position)
+    {
+        foreach (GameObject note in this.gameObject.GetComponentInChildren<Brain>().notes)
+        {
+            note.transform.parent = null;
         }
     }
 }

@@ -11,6 +11,7 @@ public class TransformManager : Singleton<TransformManager>
     bool isModelExpanding = false;
     public bool isScaling = false;
     public bool isSlicing = false;
+    public bool isMoving = false;
 
     // KeywordRecognizer object.
     public KeywordRecognizer keywordRecognizer;
@@ -58,6 +59,7 @@ public class TransformManager : Singleton<TransformManager>
 
     private void MoveScanCommand(PhraseRecognizedEventArgs args)
     {
+        isMoving = true;
         isScaling = false;
         isSlicing = false;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
@@ -65,6 +67,7 @@ public class TransformManager : Singleton<TransformManager>
 
     private void ScaleScanCommand(PhraseRecognizedEventArgs args)
     {
+        isMoving = false;
         isScaling = true;
         isSlicing = false;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
@@ -72,6 +75,7 @@ public class TransformManager : Singleton<TransformManager>
 
     private void SliceScanCommand(PhraseRecognizedEventArgs args)
     {
+        isMoving = false;
         isSlicing = true;
         isScaling = false;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
@@ -79,6 +83,9 @@ public class TransformManager : Singleton<TransformManager>
 
     private void MoveNoteCommand(PhraseRecognizedEventArgs args)
     {
+        isMoving = false;
+        isSlicing = false;
+        isScaling = false;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
     }
 
