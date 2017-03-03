@@ -25,14 +25,12 @@ public class TransformManager : Singleton<TransformManager>
 
         // Add keyword to start manipulation.
         keywordCollection.Add("Move Scan", MoveScanCommand);
-
-        /* TODO: DEVELOPER CODING EXERCISE 5.a */
-
-        // 5.a: Add keyword Scale Scan to call the MoveScanCommand function.
+        
         keywordCollection.Add("Scale Scan", ScaleScanCommand);
-
-        // 5.a: Add keyword Expand Model to call the ExpandScanCommand function.
+        
         keywordCollection.Add("Slice Scan", SliceScanCommand);
+
+        keywordCollection.Add("Move Note", MoveNoteCommand);
 
         // 5.a: Add keyword Reset Model to call the ResetScanCommand function.
         keywordCollection.Add("Reset Scan", ResetScanCommand);
@@ -76,6 +74,11 @@ public class TransformManager : Singleton<TransformManager>
     {
         isSlicing = true;
         isScaling = false;
+        GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
+    }
+
+    private void MoveNoteCommand(PhraseRecognizedEventArgs args)
+    {
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
     }
 

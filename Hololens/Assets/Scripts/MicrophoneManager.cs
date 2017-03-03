@@ -78,7 +78,8 @@ public class MicrophoneManager : MonoBehaviour
     /// Turns on the dictation recognizer and begins recording audio from the default microphone.
     /// </summary>
     /// <returns>The audio clip recorded from the microphone.</returns>
-    public AudioClip StartRecording()
+    //public AudioClip StartRecording()
+    public void StartRecording() 
     {
         // 3.a Shutdown the PhraseRecognitionSystem. This controls the KeywordRecognizers
         PhraseRecognitionSystem.Shutdown();
@@ -93,7 +94,7 @@ public class MicrophoneManager : MonoBehaviour
         hasRecordingStarted = true;
 
         // Start recording from the microphone for 10 seconds.
-        return Microphone.Start(deviceName, false, messageLength, samplingRate);
+        //return Microphone.Start(deviceName, false, messageLength, samplingRate);
     }
 
     /// <summary>
@@ -107,7 +108,7 @@ public class MicrophoneManager : MonoBehaviour
             dictationRecognizer.Stop();
         }
 
-        Microphone.End(deviceName);
+        //Microphone.End(deviceName);
     }
 
     /// <summary>
@@ -147,7 +148,7 @@ public class MicrophoneManager : MonoBehaviour
         // The default timeout with initial silence is 5 seconds.
         if (cause == DictationCompletionCause.TimeoutExceeded)
         {
-            Microphone.End(deviceName);
+            //Microphone.End(deviceName);
 
             DictationDisplay.text = "Dictation has timed out. Please press the record button again.";
             SendMessage("ResetAfterTimeout");
