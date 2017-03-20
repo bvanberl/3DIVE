@@ -22,29 +22,60 @@ using Windows.Networking.Sockets;
 public class Loader : MonoBehaviour {
 
     public int[] size;
+    public byte[] data;
+    public int width, height, depth;
 	public bool mipmap;
     public int noSlices = 0;
     
     void Start() {
-        #if !UNITY_EDITOR
-        //socketShit();
-        #endif
-
-        size = new int[3] { 512, 512, 22 };
+        renderBrain();
         // load the raw data
-        Color[] colors = LoadRAWFile();
+        /*Color[] colors = LoadRAWFile();
 		// create the texture
 		Texture3D texture = new Texture3D (size[0], size[1], size[2], TextureFormat.Alpha8, mipmap);
 		texture.SetPixels (colors);
 		texture.Apply ();
 		// assign it to the material of the parent object
 		GetComponent<Renderer>().material.SetTexture ("_Data", texture);
-		// save it as an asset for re-use
+		// save it as an asset for re-use*/
 
 	}
 
-	private Color[] LoadRAWFile()
-	{/*
+    public void renderBrain()
+    {
+        // Get max pixel value
+        int max = 0;
+        for (int i = 0; i < data.Length; i += 2)
+        {
+            byte[] unit = { data[i], data[i + 1] };
+            int checkMax = Convert.ToInt32(BitConverter.ToInt16(unit, 0));
+            if (checkMax > max)
+                max = checkMax;
+        }
+
+        // Set proper colours for texture
+        
+        Color[] colours = new Color[data.Length];
+        int index = 0;
+        for (int i = 0; i < data.Length; i += 2)
+        {
+            byte[] unit = { data[i], data[i + 1] };
+            colours[index] = Color.black;
+            colours[index++].a = (float)(Convert.ToInt32(BitConverter.ToInt16(unit, 0))) / max;
+        }
+        //Color[] colours = LoadRAWFile();
+        // create the texture
+        Texture3D texture = new Texture3D(height, width, depth, TextureFormat.Alpha8, mipmap);
+        texture.SetPixels(colours);
+        texture.Apply();
+        // assign it to the material of the parent object
+        GetComponent<Renderer>().material.SetTexture("_Data", texture);
+        // save it as an asset for re-use
+    }
+
+    /*
+    private Color[] LoadRAWFile()
+    {/*
         Color[] colors;
 
 		Debug.Log ("Opening file "+path+filename+extension);
@@ -66,8 +97,9 @@ public class Loader : MonoBehaviour {
 
 		return colors;*/
 
+        /*
         TextAsset ta = Resources.Load("pixeldata") as TextAsset;
-        byte[] data = ta.bytes;
+        data = ta.bytes;
 
         byte[] rows = { data[0], data[1], data[2], data[3] };
         size[0] = BitConverter.ToInt16(rows, 0);
@@ -75,18 +107,31 @@ public class Loader : MonoBehaviour {
         size[1] = BitConverter.ToInt16(columns, 0);
         byte[] noImages = { data[8], data[9], data[10], data[11] };
         size[2] = BitConverter.ToInt16(noImages, 0);
-        byte[] maxVal = { data[12], data[13], data[14], data[15] };
-        int max = BitConverter.ToInt16(maxVal, 0);
 
-        Color[] colours = new Color[(data.Length - 16)/2];
-        int index = 0;
+
+        int max = 0;
+        for (int i = 12; i < data.Length - 12; i++)
+        {
+            if (Convert.ToInt32(data[i]) > max)
+                max = Convert.ToInt32(data[i]);
+        }
+
+        Color[] colors = new Color[(data.Length - 16) / 2];
+        int index = 0;/*
+        for (int i = 12; i < data.Length - 12; i++)
+        {
+            byte unit = data[i];
+            colours[index] = Color.black;
+            colours[index++].a = (float)(Convert.ToInt32(unit)) / max;
+        }*/
+        /*
         for (int i = 16; i < data.Length - 16; i += 2)
         {
             byte[] unit = { data[i], data[i + 1] };
-            colours[index] = Color.black;
-            colours[index++].a = (float)(Convert.ToInt32(BitConverter.ToInt16(unit, 0))) / max;
+            colors[index] = Color.black;
+            colors[index++].a = (float)(Convert.ToInt32(BitConverter.ToInt16(unit, 0))) / max;
         }
-
+        return colors;
         /*
         TextAsset csv = Resources.Load("pixelData") as TextAsset;
         FileInfo theSourceFile = new FileInfo(Application.dataPath + "/Resources/pixelData.csv");
@@ -117,44 +162,11 @@ public class Loader : MonoBehaviour {
             text = text.Substring(0, text.Length - 1);
             colours[index] = Color.black;
             colours[index++].a = (float)(Convert.ToInt32(text)) / 919;
-        }*/
-        return colours;
-
-        
+        }
+        //return colours;
     }
+    */
+    /*
 
-#if !UNITY_EDITOR
-    async public void socketShit()
-    {
-
-         HostName hostName;
-        StreamSocket socket = null;
-            using (socket = new StreamSocket())
-            {
-                hostName = new HostName("127.0.0.1");
-
-                // Set NoDelay to false so that the Nagle algorithm is not disabled
-                socket.Control.NoDelay = false;
-
-                try
-                {
-                    // Connect to the server
-                    await socket.ConnectAsync(hostName, "2500");
-                }
-                catch (Exception exception)
-                {
-                    switch (SocketError.GetStatus(exception.HResult))
-                    {
-                        case SocketErrorStatus.HostNotFound:
-                            // Handle HostNotFound Error
-                            throw;
-                        default:
-                            // If this is an unknown status it means that the error is fatal and retry will likely fail.
-                            throw;
-                    }
-                }
-            }
-
-    }
-#endif
+    }*/
 }

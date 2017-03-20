@@ -4,13 +4,15 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Windows.Speech;
-using System.Diagnostics;
 using System.Text;
 
 public class BrainMenuInputHandler : MonoBehaviour {
     public Canvas ScanMenu;
+    public NetworkManager NetworkController;
     public GameObject BrainScanCube;
     public Text ProjectNameText, ScanNameText, PatientNameText, DateTimeText;
+    public string projectNameStr, scanNameStr, patientNameStr, dateTimeStr;
+    public bool scanReady;
     public List<GameObject> notes;
     public AudioSource audioSource;
     public bool isRecording = false;
@@ -20,6 +22,12 @@ public class BrainMenuInputHandler : MonoBehaviour {
     public int lineCount = 1;
     public GameObject brain;
     private StringBuilder textSoFar = new StringBuilder();
+
+    private void Start()
+    {
+        scanReady = false;
+        
+    }
 
     // Use this for initialization
     void Awake () {
@@ -49,6 +57,15 @@ public class BrainMenuInputHandler : MonoBehaviour {
         {
             DictationDisplay.text += "\n";
         }        */
+        if (scanReady)
+        {
+            scanReady = false;
+            ProjectNameText.text = projectNameStr;
+            PatientNameText.text = patientNameStr;
+            ScanNameText.text = scanNameStr;
+            DateTimeText.text = dateTimeStr;
+            // TODO: set pixel data here too?
+        }
 	}
 
     public void onCreateNoteButtonPressed()
@@ -86,10 +103,8 @@ public class BrainMenuInputHandler : MonoBehaviour {
     }
 
     public void onCloseButtonPressed()
-    {/*
-        #if !UNITY_EDITOR
-        System.Diagnostics.Process.GetCurrentProcess().Kill();
-        #endif*/
+    {
+        Application.Quit();
     }
 
     public void StartRecording()

@@ -22,10 +22,9 @@ public class GestureActionNote : MonoBehaviour
 
     void PerformManipulationUpdate(Vector3 position)
     {
-        if (GestureManager.Instance.IsManipulating)
+        if (GestureManager.Instance.IsManipulating && !TransformManager.Instance.isSlicing
+            && !TransformManager.Instance.isMoving && !TransformManager.Instance.isScaling)
         {
-            /* TODO: DEVELOPER CODING EXERCISE 4.a */
-
             Vector3 moveVector = Vector3.zero;
             // 4.a: Calculate the moveVector as position - manipulationPreviousPosition.
             moveVector = position - manipulationPreviousPosition;

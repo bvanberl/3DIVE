@@ -10,6 +10,7 @@ TagManager:
   - ScanMenuTag
   - BrainTag
   - BrainMenuTag
+  - NetworkControllerTag
   layers:
   - Default
   - TransparentFX

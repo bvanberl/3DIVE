@@ -521,9 +521,9 @@ PlayerSettings:
   metroCertificateSubject: DefaultCompany
   metroCertificateIssuer: DefaultCompany
   metroCertificateNotAfter: 00a82c4b2d88d301
-  metroApplicationDescription: 3DIVE
+  metroApplicationDescription: ARRIVE
   wsaImages: {}
-  metroTileShortName: 
+  metroTileShortName: 3DIVE
   metroCommandLineArgsFile: 
   metroTileShowName: 0
   metroMediumTileShowName: 0
@@ -553,7 +553,7 @@ PlayerSettings:
       Objects3D: False
       PhoneCall: False
       PicturesLibrary: False
-      PrivateNetworkClientServer: False
+      PrivateNetworkClientServer: True
       Proximity: False
       RemovableStorage: False
       SharedUserCertificates: False

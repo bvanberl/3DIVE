@@ -7,3 +7,5 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/mainScene.unity
+  - enabled: 0
+    path: C:/Users/blake/Documents/Schoolwork/SE 4450/3DIVE - Copy/Hololens/Assets/mainScene.unity
