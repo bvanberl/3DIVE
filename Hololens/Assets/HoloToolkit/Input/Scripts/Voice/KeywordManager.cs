@@ -162,5 +162,40 @@ namespace HoloToolkit.Unity.InputModule
                 keywordRecognizer.Stop();
             }
         }
+
+        public void refreshKeywords()
+        {
+            int keywordCount = KeywordsAndResponses.Length;
+            if (keywordCount > 0)
+            {
+                try
+                {
+                    string[] keywords = new string[keywordCount];
+                    // Convert the struct array into a dictionary, with the keywords and the keys and the methods as the values.
+                    // This helps easily link the keyword recognized to the UnityEvent to be invoked.
+                    for (int index = 0; index < keywordCount; index++)
+                    {
+                        KeywordAndResponse keywordAndResponse = KeywordsAndResponses[index];
+                        responses[keywordAndResponse.Keyword] = keywordAndResponse.Response;
+                        keywords[index] = keywordAndResponse.Keyword;
+                    }
+
+                    keywordRecognizer = new KeywordRecognizer(keywords);
+                    keywordRecognizer.OnPhraseRecognized += KeywordRecognizer_OnPhraseRecognized;
+
+                    
+                        keywordRecognizer.Start();
+                    
+                }
+                catch (ArgumentException)
+                {
+                    Debug.LogError("Duplicate keywords specified in the Inspector on " + gameObject.name + ".");
+                }
+            }
+            else
+            {
+                Debug.LogError("Must have at least one keyword specified in the Inspector on " + gameObject.name + ".");
+            }
+        }
     }
 }

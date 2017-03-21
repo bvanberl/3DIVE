@@ -102,6 +102,13 @@ public class BrainMenuInputHandler : MonoBehaviour {
         ScanMenu.gameObject.SetActive(true);
     }
 
+    public void onSaveButtonPressed()
+    {
+        /* TODO:
+         * Save errything
+        */
+    }
+
     public void onCloseButtonPressed()
     {
         Application.Quit();
