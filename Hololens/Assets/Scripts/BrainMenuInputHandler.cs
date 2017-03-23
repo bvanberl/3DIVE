@@ -22,6 +22,7 @@ public class BrainMenuInputHandler : MonoBehaviour {
     public int lineCount = 1;
     public GameObject brain;
     private StringBuilder textSoFar = new StringBuilder();
+    public GameObject LoadingBar;
 
     private void Start()
     {
@@ -60,6 +61,7 @@ public class BrainMenuInputHandler : MonoBehaviour {
         if (scanReady)
         {
             scanReady = false;
+            LoadingBar.SetActive(false); // Disable the loading bar
             ProjectNameText.text = projectNameStr;
             PatientNameText.text = patientNameStr;
             ScanNameText.text = scanNameStr;

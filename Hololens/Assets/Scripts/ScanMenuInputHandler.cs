@@ -11,10 +11,12 @@ public class ScanMenuInputHandler : MonoBehaviour {
     public NetworkManager NetworkController;
     public Dropdown ScanDropdown;
     public string[] scans;
+    public string selectedScan;
     public bool scansReadyFlag;
     public int counter = 1;
     public Text SelectedText;
     public Text ScanListText;
+    public Text ProjectText;
 
     // Use this for initialization
     void Start () {
@@ -26,8 +28,9 @@ public class ScanMenuInputHandler : MonoBehaviour {
         if (scansReadyFlag)
         {
             scansReadyFlag = false;
+            ScanListText.text = "";
             KeywordManager keywordMgr = this.gameObject.GetComponent<KeywordManager>();
-            keywordMgr.KeywordsAndResponses = new KeywordManager.KeywordAndResponse[scans.Length];
+            keywordMgr.KeywordsAndResponses = new KeywordManager.KeywordAndResponse[scans.Length + 1];
             NumberToWordsConverter numConv = new NumberToWordsConverter();
             foreach (string s in scans)
             {
@@ -40,6 +43,14 @@ public class ScanMenuInputHandler : MonoBehaviour {
                 keywordMgr.KeywordsAndResponses[counter - 1].Response = evt;
                 ++counter;
             }
+
+            // Add voice command for 'continue'
+            keywordMgr.KeywordsAndResponses[counter - 1].Keyword = "continue";
+            UnityEvent contEvt = new UnityEvent();
+            contEvt.AddListener(onSelectButtonPressed);
+            keywordMgr.KeywordsAndResponses[counter - 1].Response = contEvt;
+            counter = 1;
+
             keywordMgr.refreshKeywords();
         }
     }
@@ -59,12 +70,13 @@ public class ScanMenuInputHandler : MonoBehaviour {
         if (NetworkController == null)
             NetworkController = GameObject.Find("NetworkController").GetComponent<NetworkManager>();
         //NetworkController.getScan(ScanDropdown.options[ScanDropdown.value].text);
-        NetworkController.getScan(SelectedText.text);
+        NetworkController.getScan(selectedScan);
     }
 
     public void setSelected(int number)
     {
-        SelectedText.text = scans[number - 1];
+        selectedScan = scans[number - 1];
+        SelectedText.text = "Selected: " + selectedScan;
     }
 
     public void onCloseButtonPressed()

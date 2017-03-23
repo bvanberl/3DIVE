@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ProjectMenuInputHandler : MonoBehaviour {
-    public Canvas ConnectMenu, ScanMenu;
+    public Canvas ConnectMenu, ScanMenu, BrainMenu;
     public Dropdown ProjectDropdown;
     public NetworkManager NetworkController;
     public string[] projects;
@@ -29,7 +29,7 @@ public class ProjectMenuInputHandler : MonoBehaviour {
             ProjectListText.text = "";
             projectsReadyFlag = false;
             KeywordManager keywordMgr = this.gameObject.GetComponent<KeywordManager>();
-            keywordMgr.KeywordsAndResponses = new KeywordManager.KeywordAndResponse[projects.Length];
+            keywordMgr.KeywordsAndResponses = new KeywordManager.KeywordAndResponse[projects.Length + 1];
             NumberToWordsConverter numConv = new NumberToWordsConverter();
             foreach (string s in projects)
             {
@@ -42,6 +42,14 @@ public class ProjectMenuInputHandler : MonoBehaviour {
                 keywordMgr.KeywordsAndResponses[counter - 1].Response = evt;
                 ++counter;
             }
+
+            // Add voice command for 'continue'
+            keywordMgr.KeywordsAndResponses[counter - 1].Keyword = "continue";
+            UnityEvent contEvt = new UnityEvent();
+            contEvt.AddListener(onSelectButtonPressed);
+            keywordMgr.KeywordsAndResponses[counter - 1].Response = contEvt;
+            counter = 1;
+
             keywordMgr.refreshKeywords();
         }
 	}
@@ -64,14 +72,17 @@ public class ProjectMenuInputHandler : MonoBehaviour {
             if (NetworkController == null)
                 NetworkController = GameObject.Find("NetworkController").GetComponent<NetworkManager>();
 
-            //NetworkController.getScans(ProjectDropdown.options[ProjectDropdown.value].text);
-            NetworkController.getScans(SelectedText.text);
+            // Get selected project
+            NetworkController.getScans(selectedProject);
+            ScanMenu.GetComponent<ScanMenuInputHandler>().ProjectText.text = selectedProject;
+            BrainMenu.GetComponent<BrainMenuInputHandler>().projectNameStr = selectedProject;
         }
     }
 
     public void setSelected(int number)
     {
-        SelectedText.text = projects[number - 1];
+        selectedProject = projects[number - 1];
+        SelectedText.text = "Selected: " + selectedProject;
     }
 
     public void onCloseButtonPressed()

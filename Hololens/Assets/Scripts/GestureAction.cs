@@ -103,7 +103,7 @@ public class GestureAction : MonoBehaviour
             }
             else if(TransformManager.Instance.isRotating)
             {                
-                transform.Rotate(moveVector*RotationSensitivity);
+                transform.Rotate(RotationSensitivity*(new Vector3(moveVector.z,moveVector.y,moveVector.x)));
             }
             // 4.a: Update the manipulationPreviousPosition with the current position.
             manipulationPreviousPosition = position;
