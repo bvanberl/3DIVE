@@ -107,6 +107,17 @@ public class BrainMenuInputHandler : MonoBehaviour {
         /* TODO:
          * Save errything
         */
+        List<GameObject> notes = brain.GetComponent<Brain>().notes;
+        string serializedBrain = "";
+        foreach (GameObject note in notes)
+        {
+            serializedBrain += "note:" 
+                + note.transform.position.x + "~" 
+                + note.transform.position.y + "~"
+                + note.transform.position.z + "~"
+                + note.GetComponentInChildren<TextMesh>().text + ";";
+        }
+        NetworkController.saveScan(scanNameStr, serializedBrain);
     }
 
     public void onCloseButtonPressed()

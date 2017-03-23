@@ -100,7 +100,10 @@ public class GestureAction : MonoBehaviour
                 {
                     transform.localScale += -ScalingSensitivity * (new Vector3(moveVector.magnitude, moveVector.magnitude, moveVector.magnitude));
                 }
-
+            }
+            else if(TransformManager.Instance.isRotating)
+            {                
+                transform.Rotate(moveVector*RotationSensitivity);
             }
             // 4.a: Update the manipulationPreviousPosition with the current position.
             manipulationPreviousPosition = position;

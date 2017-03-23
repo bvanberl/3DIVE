@@ -12,6 +12,7 @@ public class TransformManager : Singleton<TransformManager>
     public bool isScaling = false;
     public bool isSlicing = false;
     public bool isMoving = false;
+    public bool isRotating = false;
 
     // KeywordRecognizer object.
     public KeywordRecognizer keywordRecognizer;
@@ -30,6 +31,8 @@ public class TransformManager : Singleton<TransformManager>
         keywordCollection.Add("Scale Scan", ScaleScanCommand);
         
         keywordCollection.Add("Slice Scan", SliceScanCommand);
+
+        keywordCollection.Add("Rotate Scan", RotateScanCommand);
 
         keywordCollection.Add("Move Note", MoveNoteCommand);
 
@@ -62,6 +65,7 @@ public class TransformManager : Singleton<TransformManager>
         isMoving = true;
         isScaling = false;
         isSlicing = false;
+        isRotating = false;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
     }
 
@@ -70,6 +74,7 @@ public class TransformManager : Singleton<TransformManager>
         isMoving = false;
         isScaling = true;
         isSlicing = false;
+        isRotating = false;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
     }
 
@@ -78,6 +83,7 @@ public class TransformManager : Singleton<TransformManager>
         isMoving = false;
         isSlicing = true;
         isScaling = false;
+        isRotating = false;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
     }
 
@@ -86,6 +92,16 @@ public class TransformManager : Singleton<TransformManager>
         isMoving = false;
         isSlicing = false;
         isScaling = false;
+        isRotating = false;
+        GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
+    }
+
+    private void RotateScanCommand(PhraseRecognizedEventArgs args)
+    {
+        isMoving = false;
+        isSlicing = false;
+        isScaling = false;
+        isRotating = true;
         GestureManager.Instance.Transition(GestureManager.Instance.ManipulationRecognizer);
     }
 

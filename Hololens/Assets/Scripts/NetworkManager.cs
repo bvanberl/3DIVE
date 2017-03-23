@@ -3,6 +3,7 @@
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.UI;
 using System.IO; // to get BinaryReader
 using System.Linq; // to get array's Min/Max
 using System.Collections.Generic;
@@ -20,7 +21,10 @@ public class NetworkManager : MonoBehaviour {
     public ProjectMenuInputHandler ProjectMenu;
     public ScanMenuInputHandler ScanMenu;
     public BrainMenuInputHandler BrainMenu;
+    public GameObject brainCube;
     public Loader brainLoader;
+    public Text connectionText, establishedConnText;
+    public Button disconnectButton;
 
     public static byte[] data = new byte[4];
     //public int size = 4;
@@ -121,6 +125,12 @@ public class NetworkManager : MonoBehaviour {
 #endif
     }
 
+    public void disconnect()
+    {
+#if !UNITY_EDITOR
+        sendDisconnect();
+#endif
+    }
 
 
 #if !UNITY_EDITOR
@@ -266,22 +276,39 @@ public class NetworkManager : MonoBehaviour {
     {
         try {
             // request projects
-            writer.WriteString("save-scan: " + scanName);
+            writer.WriteString("save-scan:" + scanName + ";" + serializedScan);
             await writer.StoreAsync();
             await writer.FlushAsync();
 
-            // wait for desktop to send "ready"
-            uint size = 5;
-            await reader.LoadAsync(size);
-            reader.ReadBytes(data);
-            var str = System.Text.Encoding.ASCII.GetString(data);
-            if (str == "ready") 
-            {
-                writer.WriteString("scan-data: " + serializedScan);
-                await writer.StoreAsync();
-                await writer.FlushAsync();    
-            }          
+            //update UI         
 
+        }
+        catch (Exception exception)
+        {
+            System.Diagnostics.Debug.Write(exception.ToString());
+        }
+
+    }
+#endif
+
+#if !UNITY_EDITOR
+    async void sendDisconnect()
+    {
+        try {
+            // request projects
+            writer.WriteString("disconnect");
+            await writer.StoreAsync();
+            await writer.FlushAsync();
+
+            // update UI         
+            ConnectMenu.gameObject.SetActive(true);
+            ProjectMenu.gameObject.SetActive(false);
+            ScanMenu.gameObject.SetActive(false);
+            BrainMenu.gameObject.SetActive(false);
+            brainCube.gameObject.SetActive(false);
+            establishedConnText.gameObject.SetActive(true);
+            connectionText.gameObject.SetActive(false);
+            disconnectButton.gameObject.SetActive(false);
         }
         catch (Exception exception)
         {

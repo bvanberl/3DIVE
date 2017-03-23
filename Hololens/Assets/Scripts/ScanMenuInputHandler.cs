@@ -1,6 +1,8 @@
-﻿using System.Collections;
+﻿using HoloToolkit.Unity.InputModule;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class ScanMenuInputHandler : MonoBehaviour {
@@ -10,6 +12,9 @@ public class ScanMenuInputHandler : MonoBehaviour {
     public Dropdown ScanDropdown;
     public string[] scans;
     public bool scansReadyFlag;
+    public int counter = 1;
+    public Text SelectedText;
+    public Text ScanListText;
 
     // Use this for initialization
     void Start () {
@@ -21,10 +26,21 @@ public class ScanMenuInputHandler : MonoBehaviour {
         if (scansReadyFlag)
         {
             scansReadyFlag = false;
+            KeywordManager keywordMgr = this.gameObject.GetComponent<KeywordManager>();
+            keywordMgr.KeywordsAndResponses = new KeywordManager.KeywordAndResponse[scans.Length];
+            NumberToWordsConverter numConv = new NumberToWordsConverter();
             foreach (string s in scans)
             {
-                ScanDropdown.options.Add(new Dropdown.OptionData() { text = s });
+                //ScanDropdown.options.Add(new Dropdown.OptionData() { text = s });
+                ScanListText.text += (counter + ") " + s + "\n");
+                keywordMgr.KeywordsAndResponses[counter - 1].Keyword = numConv.convertToString(counter);
+                UnityEvent evt = new UnityEvent();
+                int arg = counter;
+                evt.AddListener(delegate { setSelected(arg); });
+                keywordMgr.KeywordsAndResponses[counter - 1].Response = evt;
+                ++counter;
             }
+            keywordMgr.refreshKeywords();
         }
     }
 
@@ -42,8 +58,13 @@ public class ScanMenuInputHandler : MonoBehaviour {
         BrainMenu.gameObject.SetActive(true);
         if (NetworkController == null)
             NetworkController = GameObject.Find("NetworkController").GetComponent<NetworkManager>();
-        NetworkController.getScan(ScanDropdown.options[ScanDropdown.value].text);
-        
+        //NetworkController.getScan(ScanDropdown.options[ScanDropdown.value].text);
+        NetworkController.getScan(SelectedText.text);
+    }
+
+    public void setSelected(int number)
+    {
+        SelectedText.text = scans[number - 1];
     }
 
     public void onCloseButtonPressed()

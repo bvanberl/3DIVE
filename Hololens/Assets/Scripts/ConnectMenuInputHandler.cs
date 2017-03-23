@@ -12,6 +12,9 @@ public class ConnectMenuInputHandler : MonoBehaviour {
     public bool connectionEstablished;
     public Canvas ProjectMenu;
     public NetworkManager NetworkController;
+    public Button disconnectButton;
+    public Text connectionText;
+    public Text establishConnText;
 
 	// Use this for initialization
 	void Start () {
@@ -41,6 +44,11 @@ public class ConnectMenuInputHandler : MonoBehaviour {
             connectionEstablished = false;
             this.gameObject.SetActive(false);
             ProjectMenu.gameObject.SetActive(true);
+            disconnectButton.gameObject.SetActive(true);
+            connectionText.gameObject.SetActive(true);
+            connectionText.text = "Connection: " + IPText.text;
+            establishConnText.gameObject.SetActive(false);
+
         }
 	}
 

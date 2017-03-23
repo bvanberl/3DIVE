@@ -12,10 +12,9 @@ public class ProjectMenuInputHandler : MonoBehaviour {
     public string[] projects;
     string selectedProject;
     public bool projectsReadyFlag;
-    public KeywordManager keywordMgr;
     public int counter = 1;
-    public NumberToWordsConverter numConv = new NumberToWordsConverter();
-    public Text selectedText;
+    public Text SelectedText;
+    public Text ProjectListText;
 
     // Use this for initialization
     void Start () {
@@ -27,11 +26,15 @@ public class ProjectMenuInputHandler : MonoBehaviour {
     void Update () {
 		if (projectsReadyFlag)
         {
+            ProjectListText.text = "";
             projectsReadyFlag = false;
+            KeywordManager keywordMgr = this.gameObject.GetComponent<KeywordManager>();
             keywordMgr.KeywordsAndResponses = new KeywordManager.KeywordAndResponse[projects.Length];
+            NumberToWordsConverter numConv = new NumberToWordsConverter();
             foreach (string s in projects)
             {
-                ProjectDropdown.options.Add(new Dropdown.OptionData() { text = s });
+                //ProjectDropdown.options.Add(new Dropdown.OptionData() { text = s });
+                ProjectListText.text += (counter + ") " + s + "\n");
                 keywordMgr.KeywordsAndResponses[counter - 1].Keyword = numConv.convertToString(counter);
                 UnityEvent evt = new UnityEvent();
                 int arg = counter;
@@ -39,6 +42,7 @@ public class ProjectMenuInputHandler : MonoBehaviour {
                 keywordMgr.KeywordsAndResponses[counter - 1].Response = evt;
                 ++counter;
             }
+            keywordMgr.refreshKeywords();
         }
 	}
 
@@ -53,21 +57,21 @@ public class ProjectMenuInputHandler : MonoBehaviour {
     // Take user to the scan selection menu, from the project menu.
     public void onSelectButtonPressed()
     {
-        /* TODO: Get list of scans in selected project, and open next menu, initializing it with the proper list.
-         * Activate some loading icon in the meantime
-         * */   
-        
-        this.gameObject.SetActive(false);
-        ScanMenu.gameObject.SetActive(true);
-        if (NetworkController == null)
-            NetworkController = GameObject.Find("NetworkController").GetComponent<NetworkManager>();
-        
-        NetworkController.getScans(ProjectDropdown.options[ProjectDropdown.value].text);
+        if (SelectedText.text != "Dictate project number to select a scan.")
+        {
+            this.gameObject.SetActive(false);
+            ScanMenu.gameObject.SetActive(true);
+            if (NetworkController == null)
+                NetworkController = GameObject.Find("NetworkController").GetComponent<NetworkManager>();
+
+            //NetworkController.getScans(ProjectDropdown.options[ProjectDropdown.value].text);
+            NetworkController.getScans(SelectedText.text);
+        }
     }
 
     public void setSelected(int number)
     {
-        selectedText.text = "Selected " + number;
+        SelectedText.text = projects[number - 1];
     }
 
     public void onCloseButtonPressed()
