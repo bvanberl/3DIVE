@@ -4072,7 +4072,6 @@ GameObject:
   - component: {fileID: 695154815}
   - component: {fileID: 695154814}
   - component: {fileID: 695154813}
-  - component: {fileID: 695154816}
   - component: {fileID: 695154817}
   - component: {fileID: 695154818}
   m_Layer: 0
@@ -4157,18 +4156,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &695154816
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 695154811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 62cc4b7cf31fc4e4e80b467dc65b1a66, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  NetworkController: {fileID: 0}
 --- !u!114 &695154817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5775,11 +5762,58 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   RecognizerStart: 0
   KeywordsAndResponses:
-  - Keyword: Note
+  - Keyword: show hologram
     KeyCode: 0
     Response:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 879408730}
+          m_MethodName: onShowHologramButtonPressed
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+  - Keyword: save
+    KeyCode: 0
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 879408730}
+          m_MethodName: onSaveButtonPressed
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
+        PublicKeyToken=null
+  - Keyword: create note
+    KeyCode: 0
+    Response:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 879408730}
+          m_MethodName: onCreateNoteButtonPressed
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
       m_TypeName: UnityEngine.Events.UnityEvent, UnityEngine, Version=0.0.0.0, Culture=neutral,
         PublicKeyToken=null
 --- !u!1 &888760982
@@ -6379,6 +6413,7 @@ MonoBehaviour:
   ScanMenu: {fileID: 1407926501}
   BrainMenu: {fileID: 879408730}
   brainCube: {fileID: 1261050918}
+  brain: {fileID: 1893575244}
   brainLoader: {fileID: 1893575242}
   connectionText: {fileID: 309669533}
   establishedConnText: {fileID: 1221955191}
@@ -6976,7 +7011,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1147745359
 RectTransform:
   m_ObjectHideFlags: 0
@@ -8108,7 +8143,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f8e64f07188cff4e94c88cc9032ba86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RotationSensitivity: 200
+  RotationSensitivity: 350
   TranslationSensitivity: 3
   ScalingSensitivity: 1
   SlicingSensitivity: 1
@@ -8753,7 +8788,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 429568, guid: 59058cc613357474ebeb9dcb7c4a4235, type: 2}
       propertyPath: m_RootOrder
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 429568, guid: 59058cc613357474ebeb9dcb7c4a4235, type: 2}
       propertyPath: m_LocalScale.x
@@ -10771,6 +10806,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notes: []
+  messages: []
+  positions: []
 --- !u!1 &1906532029
 GameObject:
   m_ObjectHideFlags: 0
@@ -11388,7 +11425,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 695154816}
+      - m_Target: {fileID: 695154817}
         m_MethodName: onDisconnectButtonPressed
         m_Mode: 1
         m_Arguments:

@@ -94,6 +94,7 @@ public class BrainMenuInputHandler : MonoBehaviour {
     public void onShowHologramButtonPressed()
     {
         BrainScanCube.SetActive(true);
+        brain.GetComponent<Brain>().displayNotes();
     }
 
 

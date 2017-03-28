@@ -5,6 +5,8 @@ using UnityEngine;
 public class Brain : MonoBehaviour {
 
     public List<GameObject> notes;
+    public List<string> messages;
+    public List<Vector3> positions;
 
 	// Use this for initialization
 	void Start () {
@@ -13,13 +15,26 @@ public class Brain : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+	    // nothing
 	}
 
     // Add a list of notes to the scene for the current brain scan.
-    public void initNotes(string[] messages, Vector3[] positions)
+    public void initNotes(List<string> messages, List<Vector3> positions)
     {
-        for(int i = 0; i < messages.Length; i++)
+        foreach (string s in messages)
+        {
+            this.messages.Add(s);
+        }     
+
+        foreach (Vector3 v in positions)
+        {
+            this.positions.Add(v);
+        }
+    }
+
+    public void displayNotes()
+    {
+        for (int i = 0; i < messages.Count; i++)
         {
             GameObject newNote = Instantiate(Resources.Load("Prefabs/NoteParent")) as GameObject;
             notes.Add(newNote);

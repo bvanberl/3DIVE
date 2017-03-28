@@ -29,18 +29,21 @@ public class ProjectMenuInputHandler : MonoBehaviour {
             ProjectListText.text = "";
             projectsReadyFlag = false;
             KeywordManager keywordMgr = this.gameObject.GetComponent<KeywordManager>();
-            keywordMgr.KeywordsAndResponses = new KeywordManager.KeywordAndResponse[projects.Length + 1];
+            keywordMgr.KeywordsAndResponses = new KeywordManager.KeywordAndResponse[projects.Length];
             NumberToWordsConverter numConv = new NumberToWordsConverter();
             foreach (string s in projects)
             {
-                //ProjectDropdown.options.Add(new Dropdown.OptionData() { text = s });
-                ProjectListText.text += (counter + ") " + s + "\n");
-                keywordMgr.KeywordsAndResponses[counter - 1].Keyword = numConv.convertToString(counter);
-                UnityEvent evt = new UnityEvent();
-                int arg = counter;
-                evt.AddListener(delegate{ setSelected(arg); });
-                keywordMgr.KeywordsAndResponses[counter - 1].Response = evt;
-                ++counter;
+                if (s != "" && s != null)
+                {
+                    //ProjectDropdown.options.Add(new Dropdown.OptionData() { text = s });
+                    ProjectListText.text += (counter + ") " + s + "\n");
+                    keywordMgr.KeywordsAndResponses[counter - 1].Keyword = numConv.convertToString(counter);
+                    UnityEvent evt = new UnityEvent();
+                    int arg = counter;
+                    evt.AddListener(delegate { setSelected(arg); });
+                    keywordMgr.KeywordsAndResponses[counter - 1].Response = evt;
+                    ++counter;
+                }
             }
 
             // Add voice command for 'continue'

@@ -22,6 +22,7 @@ public class NetworkManager : MonoBehaviour {
     public ScanMenuInputHandler ScanMenu;
     public BrainMenuInputHandler BrainMenu;
     public GameObject brainCube;
+    public Brain brain;
     public Loader brainLoader;
     public Text connectionText, establishedConnText;
     public Button disconnectButton;
@@ -235,11 +236,31 @@ public class NetworkManager : MonoBehaviour {
             
             BrainMenu.dateTimeStr = scanParse[2].Split(':')[1];
             BrainMenu.scanNameStr = scanParse[0].Split(':')[1];
-            BrainMenu.patientNameStr = scanParse[1].Split(':')[1];
+            BrainMenu.patientNameStr = scanParse[1].Split(':')[1];          
             string height = scanParse[3].Split(':')[1];
             string width = scanParse[4].Split(':')[1];
             string depth = scanParse[5].Split(':')[1];
-            // still need to set project name
+
+            // get notes
+            List<string> notes = new List<string>();
+            List<Vector3> positions = new List<Vector3>();
+            if (scanParse.Length > 6)
+            {
+                for (int i = 6; i < scanParse.Length; i++)
+                {
+                    if (!string.IsNullOrEmpty(scanParse[i]))
+                    {
+                        string[] noteParse = scanParse[i].Split(':')[1].Split('~');
+                        Vector3 newPos;
+                        newPos.x = float.Parse(noteParse[0]);
+                        newPos.y = float.Parse(noteParse[1]);
+                        newPos.z = float.Parse(noteParse[2]);
+                        positions.Add(newPos);
+                        notes.Add(noteParse[3]);
+                    }
+                }
+                brain.initNotes(notes, positions);
+            }
 
             // request pixels
             writer.WriteString("pixels");

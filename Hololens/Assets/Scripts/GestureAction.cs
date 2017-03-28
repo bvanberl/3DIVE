@@ -46,7 +46,7 @@ public class GestureAction : MonoBehaviour
             yRotationFactor = GestureManager.Instance.NavigationPosition.y * RotationSensitivity;
             zRotationFactor = GestureManager.Instance.NavigationPosition.z * RotationSensitivity;
             // 2.c: transform.Rotate along the Y axis using rotationFactor.
-            transform.Rotate(new Vector3(1 * yRotationFactor, 1 * xRotationFactor, 1 * zRotationFactor));
+            //transform.Rotate(new Vector3(1 * yRotationFactor, 1 * xRotationFactor, 1 * zRotationFactor));
         }
     }
 
@@ -103,10 +103,10 @@ public class GestureAction : MonoBehaviour
             }
             else if(TransformManager.Instance.isRotating)
             {                
-                transform.Rotate(RotationSensitivity*(new Vector3(moveVector.z,moveVector.y,moveVector.x)));
+                transform.Rotate(RotationSensitivity*(new Vector3(moveVector.z,moveVector.x,moveVector.y)));
             }
             // 4.a: Update the manipulationPreviousPosition with the current position.
-            manipulationPreviousPosition = position;
+            manipulationPreviousPosition = position; 
         }
     }
 

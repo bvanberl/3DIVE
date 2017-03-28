@@ -30,18 +30,21 @@ public class ScanMenuInputHandler : MonoBehaviour {
             scansReadyFlag = false;
             ScanListText.text = "";
             KeywordManager keywordMgr = this.gameObject.GetComponent<KeywordManager>();
-            keywordMgr.KeywordsAndResponses = new KeywordManager.KeywordAndResponse[scans.Length + 1];
+            keywordMgr.KeywordsAndResponses = new KeywordManager.KeywordAndResponse[scans.Length];
             NumberToWordsConverter numConv = new NumberToWordsConverter();
             foreach (string s in scans)
             {
-                //ScanDropdown.options.Add(new Dropdown.OptionData() { text = s });
-                ScanListText.text += (counter + ") " + s + "\n");
-                keywordMgr.KeywordsAndResponses[counter - 1].Keyword = numConv.convertToString(counter);
-                UnityEvent evt = new UnityEvent();
-                int arg = counter;
-                evt.AddListener(delegate { setSelected(arg); });
-                keywordMgr.KeywordsAndResponses[counter - 1].Response = evt;
-                ++counter;
+                if (s != "" && s != null)
+                {
+                    //ScanDropdown.options.Add(new Dropdown.OptionData() { text = s });
+                    ScanListText.text += (counter + ") " + s + "\n");
+                    keywordMgr.KeywordsAndResponses[counter - 1].Keyword = numConv.convertToString(counter);
+                    UnityEvent evt = new UnityEvent();
+                    int arg = counter;
+                    evt.AddListener(delegate { setSelected(arg); });
+                    keywordMgr.KeywordsAndResponses[counter - 1].Response = evt;
+                    ++counter;
+                }
             }
 
             // Add voice command for 'continue'
